@@ -97,6 +97,13 @@ class SocketLog implements LogHandlerInterface
                 'css'  => $this->css['page'],
             ];
         }
+        if (class_exists(\Composer\InstalledVersions::class)) {
+            try {
+                $installed_version =  \Composer\InstalledVersions::getVersion('yangweijie/think-trace');
+            } catch (\Exception $ex) {
+                $installed_version = '0.0.0';
+            }
+        }
 
         foreach ($log as $type => $val) {
             $trace[] = [
@@ -107,7 +114,12 @@ class SocketLog implements LogHandlerInterface
 
             foreach ($val as $msg) {
                 if (!is_string($msg)) {
-                    $msg = var_export($msg, true);
+                    // 安装了 yangweijie/think-trace
+                    if($type == 'sql' && $installed_version != '0.0.0'){
+                        $msg = sprintf('%s %s %s', $msg['sql'], $msg['info'], PHP_EOL.$msg['file']);
+                    }else{
+                        $msg = var_export($msg, true);
+                    }
                 }
                 $trace[] = [
                     'type' => 'log',
