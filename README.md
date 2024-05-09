@@ -1,11 +1,80 @@
-SocketLog for ThinkPHP 6.0
+SocketLog for ThinkPHP 6.0 和 8
 ===============
 
-
-然后，配置应用的日志配置文件`log.php`的`type`参数为：
+## 安装
 
 ~~~
-'type'  =>  'SocketLog',
+composer require yangweijie/think-socket
+~~~
+
+## 配置
+
+log.config 里 channel 新增 socket 将 default 设为 socket
+
+~~~ php
+<?php
+
+// +----------------------------------------------------------------------
+// | 日志设置
+// +----------------------------------------------------------------------
+return [
+
+
+    // 默认日志记录通道
+    'default'      => env('log.channel', 'file'),
+    // 日志记录级别
+    'level'        => [],
+    // 日志类型记录的通道 ['error'=>'email',...]
+    'type_channel' => [],
+    // 关闭全局日志写入
+    'close'        => false,
+    // 全局日志处理 支持闭包
+    'processor'    => null,
+
+    // 日志通道列表
+    'channels'     => [
+        'file' => [
+            // 日志记录方式
+            'type'           => 'File',
+            // 日志保存目录
+            'path'           => '',
+            // 单文件日志写入
+            'single'         => false,
+            // 独立日志级别
+            'apart_level'    => [],
+            // 最大日志文件数量
+            'max_files'      => 0,
+            // 使用JSON格式记录
+            'json'           => false,
+            // 日志处理
+            'processor'      => null,
+            // 关闭通道日志写入
+            'close'          => false,
+            // 日志输出格式化
+            'format'         => '[%s][%s] %s',
+            // 是否实时写入
+            'realtime_write' => false,
+        ],
+        // 其它日志通道配置
+        'socket'=>[
+            'type'                => 'SocketLog',
+            'host'                => 'ip',
+            //日志强制记录到配置的client_id
+            'force_client_ids'    => ['xxxxx'],
+            //限制允许读取日志的client_id
+            'allow_client_ids'    => ['xxxxx'],
+        ]
+    ],
+
+];
+
+~~~
+
+env 里设置 
+
+~~~ ini
+[LOG]
+channel = socket
 ~~~
 
 
