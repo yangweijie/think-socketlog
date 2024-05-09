@@ -116,7 +116,7 @@ class SocketLog implements LogHandlerInterface
                 if (!is_string($msg)) {
                     // 安装了 yangweijie/think-trace
                     if($type == 'sql' && $installed_version != '0.0.0'){
-                        $msg = sprintf('%s %s %s', $msg['sql'], $msg['info'], PHP_EOL.$msg['file']);
+                        $msg = sprintf('%s %s %s', $msg['sql'], $msg['info'], PHP_EOL.$msg['jump']??'');
                     }else{
                         $msg = var_export($msg, true);
                     }
